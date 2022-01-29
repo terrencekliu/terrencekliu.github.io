@@ -50,7 +50,8 @@
 }
 
 .smallNonServicesText.card {
-    min-height:100;
+    min-height: 215px;
+    cursor: pointer;
 }
 
 .servicesIcon {
@@ -87,16 +88,19 @@
 
 .small-container{
 	margin: auto;
-	width: 60%;
+    max-width: 800px;
+    width: 90%;
 }
 
 .smaller-container {
     min-height: 1px;
-    width: 60%;
+    max-width: 800px;
+    width: 90%;
     margin: auto;
 }
 
 .xsmall-container{
 	margin: auto;
-	width: 30%;
+	max-width: 400px;
+    width: 90%;
 }
