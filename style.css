@@ -3,6 +3,10 @@
     background-color: black;
 }
 
+.navbar {
+    background-color: rgba(0, 0, 25, 0.5);
+}
+
 /* hero background image */
 .bgimage {
     height:100vh;
