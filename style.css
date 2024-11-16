@@ -31,16 +31,20 @@
 }
 
 /* spacing on all sections */
-/* #about, #services, #portfolio, #contact {
-    margin-top: 4rem;
-    padding-top: 4rem;
-} */
+#about, #education, #skills, #services, #portfolio, #contact {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+}
 #contact {
     padding-bottom: 4rem;
 }
 /* about section image css */
 .imageAboutPage {
     width: 100%;
+}
+
+.card {
+    margin: 1rem;
 }
 
 /* services section css */
@@ -104,7 +108,7 @@
 }
 
 .xsmall-container{
-	margin: auto;
+    margin: auto;
 	max-width: 400px;
     width: 90%;
 }
