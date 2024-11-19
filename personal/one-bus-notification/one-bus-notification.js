@@ -72,7 +72,7 @@ function getHtmlSection(routeName, upcomingArrivals) {
 
 function getHtmlTrip(name, nextArrivals) {
     let sectionString = ""
-    nextArrivals.keys().forEach(routeName => {
+    Object.keys(nextArrivals).forEach(routeName => {
         const upcomingArrivals = nextArrivals.get(routeName)
 
         sectionString += getHtmlSection(routeName, upcomingArrivals) + "\n"
