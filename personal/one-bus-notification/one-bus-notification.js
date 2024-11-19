@@ -55,7 +55,7 @@ function getMinutesDifference(ecoph) {
 
 function getHtmlBullets(upcomingArrivals) {
     let html = ""
-    upcomingArrivals.forEach((arrival, index) => {
+    upcomingArrivals.forEach(arrival => {
         html += `<li>${arrival} minutes</li>`
     })
     return html
@@ -151,7 +151,7 @@ async function main() {
         const routeToExpectedArrival = new Map
 
         nextArrivals
-            .filter(bus => closestTrip === [] || closestTrip.routeIds.includes(bus["routeShortName"]))
+            .filter(bus => closestTrip.routeIds !== [] || closestTrip.routeIds.includes(bus["routeShortName"]))
             .forEach(bus => {
                 const expectedArrival = getMinutesDifference(bus["predictedArrivalTime"])
                 if (expectedArrival >= 0) {
