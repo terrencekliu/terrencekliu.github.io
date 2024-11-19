@@ -54,8 +54,7 @@ function getMinutesDifference(ecoph) {
 }
 
 function displayData(data) {
-    const outputDiv = document.getElementById('output')
-    outputDiv.innerHTML = JSON.stringify(data, null, 2)
+    $(document.body).append(JSON.stringify(data, null, 2))
 }
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -109,8 +108,6 @@ async function main() {
     const trips = parseTrips(rawTrips)
 
     const closestTrip = findNearestTrip(latitude, longitude, trips)
-    console.log(closestTrip)
-    console.log(trips)
     const arrivalUrl = `https://api.pugetsound.onebusaway.org/api/where/arrivals-and-departures-for-stop/${closestTrip.id}.json?key=${apiKey}&minutesBefore=0&minutesAfter=120`
 
     const arrivals = await getUrlJson(arrivalUrl)
