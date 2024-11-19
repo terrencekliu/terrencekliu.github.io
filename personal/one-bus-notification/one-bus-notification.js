@@ -53,8 +53,43 @@ function getMinutesDifference(ecoph) {
     return Math.floor(differenceInMilliseconds / 60000)
 }
 
-function displayData(data) {
-    $(document.body).append(JSON.stringify(data, null, 2))
+function getHtmlBullets(upcomingArrivals) {
+    let html = ""
+    upcomingArrivals.forEach((arrival, index) => {
+        html += `<li>${arrival} minutes</li>`
+    })
+    return html
+}
+
+function getHtmlSection(routeName, upcomingArrivals) {
+    return `
+        <h2>Route ${routeName} Upcoming Arrivals</h2>
+        <ul>
+            ${getHtmlBullets(upcomingArrivals)}
+        </ul>
+    `
+}
+
+function getHtmlTrip(name, nextArrivals) {
+    let sectionString = ""
+    nextArrivals.keys().forEach(routeName => {
+        const upcomingArrivals = nextArrivals.get(routeName)
+
+        sectionString += getHtmlSection(routeName, upcomingArrivals) + "\n"
+    })
+
+    return `
+        <h1>${name}</h1>
+        ${sectionString}
+    `
+}
+
+function displayData(name, nextArrivals) {
+    if (nextArrivals === undefined) {
+        $(document.body).append("No departures found!")
+        return
+    }
+    $(document.body).append(getHtmlTrip(name, nextArrivals))
 }
 
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -113,18 +148,24 @@ async function main() {
     const arrivals = await getUrlJson(arrivalUrl)
     if (arrivals) {
         const nextArrivals = arrivals.data["entry"]["arrivalsAndDepartures"]
-        const texts = nextArrivals
-            .filter(bus => closestTrip.routeIds.includes(bus["routeShortName"]))
-            .map(bus => {
-                const minutes = getMinutesDifference(bus["predictedArrivalTime"])
-                return minutes < 0
-                    ? undefined
-                    : `${minutes}|${closestTrip.name}: Route ${bus["routeShortName"]} arrives in ${getMinutesDifference(bus["predictedArrivalTime"])} minutes`
+        const routeToExpectedArrival = new Map
+
+        nextArrivals
+            .filter(bus => closestTrip === [] || closestTrip.routeIds.includes(bus["routeShortName"]))
+            .forEach(bus => {
+                const expectedArrival = getMinutesDifference(bus["predictedArrivalTime"])
+                if (expectedArrival >= 0) {
+                    const routeName = bus["routeShortName"]
+                    if (!routeToExpectedArrival.has(routeName)) {
+                        routeToExpectedArrival.set(routeName, new Set([expectedArrival]))
+                    } else {
+                        routeToExpectedArrival.get(routeName).add(expectedArrival)
+                    }
+                }
             })
-            .filter(element => !!element)
-            .sort((a, b) => Number(a.split("|")[0]) > Number(b.split("|")[0]))
-            .map(text => text.split("|")[1])
-        displayData(texts)
+        displayData(closestTrip.name, routeToExpectedArrival)
+    } else {
+        displayData(undefined, undefined)
     }
 }
 
